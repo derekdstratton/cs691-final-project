@@ -2,7 +2,6 @@
 # Modified by Derek Stratton on 4/17/2022 for Python 3
 
 import random
-import sys
 from collections import defaultdict
 
 
@@ -14,8 +13,9 @@ class HumanPlayer(object):
         # this class should affect the global deck
         self.score = 0
         # self.name = raw_input('Name yourself: ')
-        print('Name yourself: ')
-        self.name = input()
+        self.name = 'Player'
+        # print('Name yourself: ')
+        # self.name = input()
 
     def Draw(self):  # assuming that deck is a global
         cardDrawn = self.deck.pop()  # removes the last card from deck
@@ -42,12 +42,8 @@ class HumanPlayer(object):
                         for i in range(val))  # meh, make it prettier
 
     def makeTurn(self):
-        print('%s\'s hand: %s' % (self.name, self.displayHand()))
-        # chooseCard = raw_input('What card do you ask for? ').strip()
-        print('What card do you ask for? ')
+        print('%s\'s hand: %s\nWhat card do you ask for?' % (self.name, self.displayHand()))
         chooseCard = input().strip()
-        if chooseCard == 'quit':
-            sys.exit(0)
         if chooseCard not in self.hand:
             print('You don\'t have that card. Try again! (or enter quit to exit)')
             chooseCard = self.makeTurn()
@@ -112,16 +108,29 @@ class PlayGoFish(object):
     def __init__(self):
         self.deck = ('2 3 4 5 6 7 8 9 10 J Q K A ' * 4).split(' ')
         self.deck.remove('')
+        random.shuffle(self.deck)
         self.player = [HumanPlayer(self.deck), Computer(self.deck)]  # makes counting turns easier
 
     def endOfPlayCheck(self):  # checks if hands/decks are empty using the any method
         return self.deck or self.player[0].hand or self.player[1].hand
 
-    def play(self):
-        random.shuffle(self.deck)
+    def deal_cards(self):
         for i in range(9):  # Deal the first cards
             self.player[0].Draw()
             self.player[1].Draw()
+
+    def determine_winner(self):
+        print('\nScores: \n%s: %d\n%s: %d\n' % (self.player[0].name, self.player[0].score,
+                                                self.player[1].name, self.player[1].score))
+        if self.player[0].score > self.player[1].score:
+            print(self.player[0].name, 'won!')
+        elif self.player[0].score == self.player[1].score:
+            print('Draw!')
+        else:
+            print(self.player[1].name, 'won!')
+
+    def play(self):
+        self.deal_cards()
         turn = 0
         while self.endOfPlayCheck():
             print('\nTurn %d (%s:%d %s:%d) %d cards remaining.' % (turn, self.player[0].name,
@@ -139,14 +148,7 @@ class PlayGoFish(object):
                 self.player[whoseTurn].gotCard(cardFished, result)
                 if not self.endOfPlayCheck(): break
             turn += 1
-        print('\nScores: \n%s: %d\n%s: %d\n' % (self.player[0].name, self.player[0].score,
-                                          self.player[1].name, self.player[1].score))
-        if self.player[0].score > self.player[1].score:
-            print(self.player[0].name, 'won!')
-        elif self.player[0].score == self.player[1].score:
-            print('Draw!')
-        else:
-            print(self.player[1].name, 'won!')
+        self.determine_winner()
 
 
 if __name__ == "__main__":
