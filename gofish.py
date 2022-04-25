@@ -12,10 +12,7 @@ class HumanPlayer(object):
         self.deck = deck  # making a copy of deck, all changes within
         # this class should affect the global deck
         self.score = 0
-        # self.name = raw_input('Name yourself: ')
         self.name = 'Player'
-        # print('Name yourself: ')
-        # self.name = input()
 
     def Draw(self):  # assuming that deck is a global
         cardDrawn = self.deck.pop()  # removes the last card from deck
