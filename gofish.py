@@ -124,10 +124,22 @@ class PlayGoFish(object):
                                                 self.player[1].name, self.player[1].score))
         if self.player[0].score > self.player[1].score:
             print(self.player[0].name, 'won!')
+            return 0
         elif self.player[0].score == self.player[1].score:
             print('Draw!')
+            return -1
         else:
             print(self.player[1].name, 'won!')
+            return 1
+
+    def card_interaction(self, whoseTurn, otherPlayer, cardFished):
+        result = self.player[otherPlayer].fishFor(cardFished)
+        if not result:  # Draws and ends turn
+            self.player[whoseTurn].Draw()
+            return False
+        print('%s got %d more %s.' % (self.player[whoseTurn].name, result, cardFished))
+        self.player[whoseTurn].gotCard(cardFished, result)
+        return True
 
     def play(self):
         self.deal_cards()
@@ -140,12 +152,7 @@ class PlayGoFish(object):
             otherPlayer = (turn + 1) % 2
             while True:  # loop until player finishes turn
                 cardFished = self.player[whoseTurn].makeTurn()
-                result = self.player[otherPlayer].fishFor(cardFished)
-                if not result:  # Draws and ends turn
-                    self.player[whoseTurn].Draw()
-                    break
-                print('%s got %d more %s.' % (self.player[whoseTurn].name, result, cardFished))
-                self.player[whoseTurn].gotCard(cardFished, result)
+                if not self.card_interaction(whoseTurn, otherPlayer, cardFished): break
                 if not self.endOfPlayCheck(): break
             turn += 1
         self.determine_winner()
