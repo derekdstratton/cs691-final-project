@@ -13,7 +13,7 @@ The game is a console Go Fish game with a human and computer player.
 Tests were written in Python using the unittest framework. The tests achieve above 75% code coverage
 and are automatically run through a GitHub Actions workflow when a push is made to this repository.
 
-## Deployment
+## Deployment 
 
 Deployment is done through GitHub actions, where the game is containerized using Docker and stored 
 in AWS's Elastic Container Registry (ECR). The game is also deployed using AWS's Elastic Container
