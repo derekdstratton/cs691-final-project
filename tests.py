@@ -3,11 +3,12 @@ from gofish import *
 
 
 class TestGoFish(unittest.TestCase):
+    # sets up the deck for every game, since it is needed for all objects being tested
     def setUp(self):
         self.deck = ('2 3 4 5 6 7 8 9 10 J Q K A ' * 4).split(' ')
         self.deck.remove('')
 
-    ### Unit Tests
+    """ Unit Tests"""
 
     def test_human_draw_removes_card(self):
         human = HumanPlayer(self.deck)
@@ -124,7 +125,7 @@ class TestGoFish(unittest.TestCase):
         # draw is -1
         self.assertEqual(game.determine_winner(), -1)
 
-    ### Integration Tests
+    """ Integration Tests """
 
     def test_cpu_gives_requested_card_to_player(self):
         cpu = Computer(self.deck)
